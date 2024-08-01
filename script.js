@@ -78,7 +78,7 @@ async function quoteLiveTile() {
       throw new Error(`Error status: ${response.status}`);
     }
     const quote = await response.json();
-    console.log(quote);
+    // console.log(quote);
     let liveTile = document.getElementById('live-tile');
     liveTile.textContent = quote[0].quote;
   } catch (error) {
