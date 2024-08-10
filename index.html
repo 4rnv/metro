@@ -7,9 +7,10 @@
     <link href="https://cdn.metroui.org.ua/current/icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="style.css">
-    <title>Rebuild of Windows Phone</title>
+    <title>Windows Phone</title>
 </head>
 <body>
+    <canvas id="blur-canvas"></canvas>
     <div class="status-bar">
         <div><span class="mdi mdi-battery"></span></div>
         <div id="clock"></div>
@@ -170,28 +171,61 @@
     </div>
     <div class="all-apps" id="app-center">
         <div class="header">
-            <p>Info</p>
+            <h1>Info</h1>
         </div>
         <div class="content">
             <div id="settings">
-                <input type="text" id="accent-picker" name="tile-color" placeholder="#91b2ef (hex code) or rgba(27, 161, 226, 0.5) format">
                 <input type="url" id="background-image-url" name="background-image-url" placeholder="Enter background image URL">
+                <div id="color-picker">
+                    <label>
+                      <input type="radio" name="tile-color" value="#1BA1E2">
+                      <span class="color-box" style="background-color: #1BA1E2;"></span>
+                    </label>
+                    <label>
+                      <input type="radio" name="tile-color" value="#F09609">
+                      <span class="color-box" style="background-color: #F09609;"></span>
+                    </label>
+                    <label>
+                      <input type="radio" name="tile-color" value="#4CAF50">
+                      <span class="color-box" style="background-color: #4CAF50;"></span>
+                    </label>
+                    <label>
+                      <input type="radio" name="tile-color" value="#00ABA9">
+                      <span class="color-box" style="background-color: #00ABA9;"></span>
+                    </label>
+                    <label>
+                        <input type="radio" name="tile-color" value="#E51400">
+                        <span class="color-box" style="background-color: #E51400;"></span>
+                    </label>
+                    <label>
+                        <input type="radio" name="tile-color" value="#E671B8">
+                        <span class="color-box" style="background-color: #E671B8;"></span>
+                    </label>
+                    <label>
+                        <input type="radio" name="tile-color" value="#A200FF">
+                        <span class="color-box" style="background-color: #A200FF;"></span>
+                    </label>
+                    <label>
+                      <input type="radio" name="tile-color" value="rgba(0, 0, 0, 0.1)">
+                      <span class="color-box" style="background-color: rgba(0, 0, 0, 0.1);"></span>
+                    </label>
+                  </div>
                 <div><button id="apply-settings-button">Save</button> <button onclick="clearStorage()">Clear</button></div>
-            </div>            
-            <div class="app">
-                <img src="./icons/appbar.social.github.octocat.solid.png" alt="App Icon" class="app-icon">
-                <div class="app-name">Github</div>
-            </div>
+            </div>       
             <div class="app">
                 <img src="./icons/appbar.settings.png" alt="App Icon" class="app-icon">
                 <div class="app-name">Settings</div>
+            </div>     
+            <div class="app">
+                <img src="./icons/appbar.social.github.octocat.solid.png" alt="App Icon" class="app-icon">
+                <div class="app-name">Github</div>
             </div>
         </div>
     </div>
     </div>
     <div class="nav-bar">
         <button onclick="toggleAllApps()"><span class="mif-backspace mif-2x"></span></button>
-        <button><span class="mif-windows mif-2x"></span></button>
+        <button onclick="toggleAllApps()"><span class="mif-windows mif-2x"></span></button>
         <button><span class="mif-search mif-2x"></span></button>
     </div>
     <script src="./script.js"></script>

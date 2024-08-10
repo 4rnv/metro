@@ -17,6 +17,11 @@ html::-webkit-scrollbar-track {
 html::-webkit-scrollbar-thumb {
     background: var(--accent);
 }
+
+h1,h2 {
+    margin: 0;
+    font-weight: 100;
+}
 body {
     margin: 0;
     font-family: 'Segoe UI light', Tahoma, Geneva, Verdana, sans-serif;
@@ -27,6 +32,16 @@ body {
     background-blend-mode: multiply;
     background-size: contain;
     scroll-behavior: smooth;
+}
+#blur-canvas {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+
+    position: fixed;
+    pointer-events: none;
 }
 p {
     margin: 0;
@@ -39,7 +54,7 @@ p {
     justify-content: flex-end;
     gap: 5px;
     padding: 5px 10px;
-    font-size: 14px;
+    font-size: 20px;
 }
 .container {
     display: flex;
@@ -52,10 +67,11 @@ p {
     padding: 4px;
     flex: 1;
     grid-auto-rows: calc((100vw - 30px) / 6);
+    position: relative;
+    z-index: 1;
 }
 .tile {
     background-color: var(--accent);
-    backdrop-filter: blur(2px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -95,7 +111,6 @@ p {
 }
 .nav-bar {
     background-color: var(--bar);
-    backdrop-filter: blur(8px);
     display: flex;
     justify-content: space-around;
     padding: 5px;
@@ -109,21 +124,21 @@ p {
     background-color: transparent;
     border: none;
     padding: 5px;
+    cursor: pointer;
 }
 #calendar {
     font-size: 48px;
 }
 #live-tile {
-    font-size: 8px;
+    font-size: 20px;
     margin: 8px;
 }
 .quote {
     white-space: nowrap;
-    font-size: 4px;
     overflow: hidden;
     text-overflow: ellipsis; 
     word-wrap: break-word;
-    max-width: 200px;
+    max-width: -webkit-fill-available;
     display: inline-block;
 }
 .tile:hover {
@@ -133,29 +148,35 @@ button:hover {
     cursor: pointer;
 }
 #start-screen {
-    transition: all 0.5s;
+    /* position: absolute; */
+    /* width: 100%; */
+    transition: transform 0.5s ease-in-out;
 }
+
 #start-screen.hidden {
-    display: none;
-    transition: all 0.5s;
+    transform: translateX(-100%);
+    transition: transform 0.5s ease-in-out;
 }
 .all-apps {
-    width: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
     background-color: #0001;
-    backdrop-filter: blur(8px);
     color: white;
     overflow: hidden;
-    transition: width 0.3s;
+    transform: translateX(100%);
+    transition: transform 0.5s ease-in-out;
     display: flex;
     flex-direction: column;
-    transition: all 0.5s;
 }
 .all-apps.open {
-    width: 100%;
-    height: 90vh;
-    transition: all 0.5s;
+    transform: translateX(0);
+    transition: transform 0.5s ease-in-out;
 }
 .all-apps .header {
+    margin-top: 10px;
     padding: 0 10px;
     background-color: transparent;
     font-size: 2rem;
@@ -184,34 +205,32 @@ button:hover {
 #settings {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    gap: 2rem;
 }
 .all-apps input {
-    margin: 12px auto;
     appearance: none;
     outline: none;
-    padding: 10px 5px;
+    padding: 12px 16px;
     border: 1px solid gray;
     background-color: transparent;
     color: gray;
-    width: 90vw;
+    max-width: -webkit-fill-available;
+    font-size: 20px;
 }
 .all-apps input:focus {
     border: 1px solid white;
     color: white;
 }
 .all-apps button {
-    padding: 10px;
-    border: 1px solid white;
+    padding: 12px 16px;
+    border: 2px solid gray;
     background-color: var(--bar);
     color: white;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 20px;
 }
 .all-apps button:hover {
     background-color: transparent;
-    color: var(--accent);
-    border: 2px solid var(--accent);
 }
 .tile {
     perspective: 1000px;
@@ -236,3 +255,23 @@ button:hover {
 .tile.flipped .tile-inner {
     transform: rotateX(-360deg);
 }
+#color-picker {
+    display: flex;
+    gap: 4px;
+  }
+  
+  .color-box {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 1px solid white;
+    cursor: pointer;
+  }
+  
+  input[type="radio"] {
+    display: none;
+  }
+  
+  input[type="radio"]:checked + .color-box {
+    border: 2px solid white;
+  }

@@ -36,6 +36,7 @@ function toggleAllApps() {
 
 let touchstartX = 0;
 let touchendX = 0;
+const swipeThreshold = 50;  // Minimum swipe distance in pixels
 
 const startScreen = document.getElementById('start-screen');
 const allApps = document.getElementById('app-center');
@@ -59,15 +60,16 @@ allApps.addEventListener('touchend', (e) => {
 });
 
 function handleGesture(pointer) {
-  if (pointer===1) {
-    if (touchendX > touchstartX) {
+  const swipeDistance = touchendX - touchstartX;
+
+  if (pointer === 1) {
+    if (swipeDistance > swipeThreshold) {
       toggleAllApps();
-  }
-  }
-  else if (pointer===0) {
-  if (touchendX < touchstartX) {
+    }
+  } else if (pointer === 0) {
+    if (swipeDistance < -swipeThreshold) {
       toggleAllApps();
-  }
+    }
   }
 }
 
@@ -109,32 +111,56 @@ function applyTileColor(tileColor) {
       localStorage.setItem('Windows-Phone-Accent-Colour', tileColor);
       return true;
     } else {
-      alert('Invalid color value. Please enter a valid hex (#rrggbb format) or rgba color(rr,gg,bb,aa format)');
+      alert('Invalid color value. Please enter a valid hex (#rrggbb format) or rgba color (rr,gg,bb,aa format)');
       return false;
     }
   }
 }
 
-// Function to apply the background image
 function applyBackgroundImage(backgroundImageUrl) {
   const defaultBackground = '#000000';
+  
+  const canvas = document.getElementById('blur-canvas');
+  const ctx = canvas.getContext('2d');
 
   if (backgroundImageUrl) {
-    document.body.style.backgroundImage = `url(${backgroundImageUrl})`;
-    localStorage.setItem('Windows-Phone-Background', backgroundImageUrl);
+    const img = new Image();
+    img.crossOrigin = "anonymous"; // Allow cross-origin image loading if needed
+    img.src = backgroundImageUrl;
+
+    img.onload = function() {
+      // Resize the canvas to cover the entire document
+      resizeCanvas();
+
+      // Clear the canvas and draw the blurred image
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.filter = 'blur(12px)';
+      
+      // Draw the image repeatedly to cover the entire height
+      for (let y = 0; y < canvas.height; y += img.height) {
+        ctx.drawImage(img, 0, y, canvas.width, img.height);
+      }
+
+      localStorage.setItem('Windows-Phone-Background', backgroundImageUrl);
+    };
+
+    img.onerror = function() {
+      alert('Failed to load image. Please check the URL and try again.');
+      // Apply default background color if image loading fails
+      document.body.style.backgroundColor = defaultBackground;
+    };
   } else {
     document.body.style.backgroundColor = defaultBackground;
   }
 }
 
-function applySettings() {
-  const tileColorInput = document.getElementById('accent-picker').value;
-  const backgroundImageUrlInput = document.getElementById('background-image-url').value;
 
-  const tileColor = tileColorInput || '#1BA1E2';
-  const isTileColorValid = applyTileColor(tileColor);
-  
+function applySettings() {
+  const selectedColor = document.querySelector('input[name="tile-color"]:checked').value;
+  const isTileColorValid = applyTileColor(selectedColor);
+
   if (isTileColorValid) {
+    const backgroundImageUrlInput = document.getElementById('background-image-url').value;
     applyBackgroundImage(backgroundImageUrlInput);
   }
 }
@@ -145,11 +171,10 @@ function loadSettings() {
 
   // Apply the saved tile color
   document.documentElement.style.setProperty('--accent', savedTileColor);
-  //document.getElementById('accent-picker').value = savedTileColor;
 
   // Apply the saved background image or color
   if (savedBackgroundImage.startsWith('http')) {
-    document.body.style.backgroundImage = `url(${savedBackgroundImage})`;
+    applyBackgroundImage(savedBackgroundImage);  // Use the applyBackgroundImage function to load the saved image
   } else {
     document.body.style.backgroundColor = savedBackgroundImage;
   }
@@ -157,7 +182,10 @@ function loadSettings() {
 
 document.getElementById('apply-settings-button').addEventListener('click', applySettings);
 
-document.addEventListener('DOMContentLoaded', loadSettings);
+document.addEventListener('DOMContentLoaded', () => {
+  loadSettings();
+  resizeCanvas();
+});
 
 document.getElementById('accent-picker').addEventListener('keypress', function(event) {
   if (event.key === 'Enter') {
@@ -176,5 +204,16 @@ function clearStorage() {
   localStorage.removeItem('Windows-Phone-Background');
   loadSettings();
 }
+
+// Function to resize the canvas based on the window size
+function resizeCanvas() {
+  const canvas = document.getElementById('blur-canvas');
+  if (canvas) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight + window.innerHeight;
+  }
+}
+
+window.addEventListener('resize', resizeCanvas);
 
 setInterval(flipTile, 10000);
