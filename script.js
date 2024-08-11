@@ -187,12 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
   resizeCanvas();
 });
 
-document.getElementById('accent-picker').addEventListener('keypress', function(event) {
-  if (event.key === 'Enter') {
-    applySettings();
-  }
-});
-
 document.getElementById('background-image-url').addEventListener('keypress', function(event) {
   if (event.key === 'Enter') {
     applySettings();

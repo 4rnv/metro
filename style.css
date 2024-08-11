@@ -22,6 +22,10 @@ h1,h2 {
     margin: 0;
     font-weight: 100;
 }
+a {
+    text-decoration: none;
+    color: inherit;
+}
 body {
     margin: 0;
     font-family: 'Segoe UI light', Tahoma, Geneva, Verdana, sans-serif;
@@ -68,6 +72,8 @@ p {
     flex: 1;
     grid-auto-rows: calc((100vw - 30px) / 6);
     position: relative;
+    width: -webkit-fill-available;
+    width: -moz-available;
     z-index: 1;
 }
 .tile {
@@ -83,7 +89,7 @@ p {
     transition: all 0.2s;
 }
 .tile:active {
-    scale: 0.95;
+    scale: 0.90;
 }
 .tile.large {
     grid-column: span 4;
@@ -139,6 +145,8 @@ p {
     text-overflow: ellipsis; 
     word-wrap: break-word;
     max-width: -webkit-fill-available;
+    max-width: fill-available;
+    max-width: -moz-available;
     display: inline-block;
 }
 .tile:hover {
@@ -148,8 +156,6 @@ button:hover {
     cursor: pointer;
 }
 #start-screen {
-    /* position: absolute; */
-    /* width: 100%; */
     transition: transform 0.5s ease-in-out;
 }
 
@@ -230,7 +236,8 @@ button:hover {
     font-size: 20px;
 }
 .all-apps button:hover {
-    background-color: transparent;
+    background-color: gray;
+    color: white;
 }
 .tile {
     perspective: 1000px;
@@ -275,3 +282,52 @@ button:hover {
   input[type="radio"]:checked + .color-box {
     border: 2px solid white;
   }
+
+@media (min-width: 768px) {
+    .main-grid {
+        grid-template-columns: repeat(12, 1fr); /* 12 columns for desktop */
+        grid-auto-rows: calc((100vw - 60px) / 12); /* Adjusting for desktop */
+        padding: 3rem;
+        padding-top: 0;
+    }
+
+    .tile {
+        grid-column: span 3;
+        grid-row: span 3;
+    }
+
+    .tile.large {
+        grid-column: span 3;
+        grid-row: span 3;
+    }
+
+    .tile.wide {
+        grid-column: span 6;
+        grid-row: span 3;
+    }
+}
+
+/* Larger Desktop Screens */
+@media (min-width: 1200px) {
+    .main-grid {
+        grid-template-columns: repeat(12, 1fr);
+        grid-auto-rows: calc((100vw - 120px) / 12);
+        padding: 3rem;
+        padding-top: 0;
+    }
+
+    .tile {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+
+    .tile.large {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+
+    .tile.wide {
+        grid-column: span 4;
+        grid-row: span 2;
+    }
+}
