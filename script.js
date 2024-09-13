@@ -3,6 +3,50 @@ window.onload = function () {
     displayDate();
     quoteLiveTile();
 }
+
+document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+});
+
+const tiles = document.querySelectorAll('.tile');
+const customMenu = document.getElementById('custom-menu');
+
+tiles.forEach(tile => {
+  tile.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    const menuX = e.pageX + 'px';
+    const menuY = e.pageY + 'px';
+
+    customMenu.style.left = menuX;
+    customMenu.style.top = menuY;
+    customMenu.style.display = 'block';
+  });
+
+  document.addEventListener('click', () => {
+    customMenu.style.display = 'none';
+  });
+});
+
+// For touch devices (long-press detection)
+tiles.forEach(tile => {
+  let pressTimer;
+
+  tile.addEventListener('touchstart', (e) => {
+    pressTimer = setTimeout(() => {
+      const menuX = e.touches[0].pageX + 'px';
+      const menuY = e.touches[0].pageY + 'px';
+
+      customMenu.style.left = menuX;
+      customMenu.style.top = menuY;
+      customMenu.style.display = 'block';
+    }, 500);
+  });
+
+  tile.addEventListener('touchend', () => {
+    clearTimeout(pressTimer);
+  });
+});
+
 function displayClock(){
   var now = new Date();
   var hours = now.getHours();
@@ -96,11 +140,8 @@ function flipTile() {
   }, 1000);
 }
 
-// Function to apply the tile color
 function applyTileColor(tileColor) {
   const defaultTileColor = '#1BA1E2';
-
-  // Validate the tile color
   if (tileColor === '#000000') {
     alert("Can't use pure black as accent colour");
     return false; // Indicate failure
@@ -129,14 +170,10 @@ function applyBackgroundImage(backgroundImageUrl) {
     img.src = backgroundImageUrl;
 
     img.onload = function() {
-      // Resize the canvas to cover the entire document
       resizeCanvas();
 
-      // Clear the canvas and draw the blurred image
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.filter = 'blur(12px)';
-      
-      // Draw the image repeatedly to cover the entire height
       for (let y = 0; y < canvas.height; y += img.height) {
         ctx.drawImage(img, 0, y, canvas.width, img.height);
       }
@@ -146,7 +183,6 @@ function applyBackgroundImage(backgroundImageUrl) {
 
     img.onerror = function() {
       alert('Failed to load image. Please check the URL and try again.');
-      // Apply default background color if image loading fails
       document.body.style.backgroundColor = defaultBackground;
     };
   } else {
@@ -169,10 +205,7 @@ function loadSettings() {
   const savedTileColor = localStorage.getItem('Windows-Phone-Accent-Colour') || '#1BA1E2';
   const savedBackgroundImage = localStorage.getItem('Windows-Phone-Background') || '#000000';
 
-  // Apply the saved tile color
   document.documentElement.style.setProperty('--accent', savedTileColor);
-
-  // Apply the saved background image or color
   if (savedBackgroundImage.startsWith('http')) {
     applyBackgroundImage(savedBackgroundImage);  // Use the applyBackgroundImage function to load the saved image
   } else {
@@ -199,7 +232,6 @@ function clearStorage() {
   loadSettings();
 }
 
-// Function to resize the canvas based on the window size
 function resizeCanvas() {
   const canvas = document.getElementById('blur-canvas');
   if (canvas) {

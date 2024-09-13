@@ -63,6 +63,7 @@ p {
 .container {
     display: flex;
     width: 100%;
+    margin: 0.5rem 0;
 }
 .main-grid {
     display: grid;
@@ -284,6 +285,10 @@ button:hover {
   }
 
 @media (min-width: 768px) {
+    .container {
+        margin: 1rem 0;
+    }
+
     .main-grid {
         grid-template-columns: repeat(12, 1fr); /* 12 columns for desktop */
         grid-auto-rows: calc((100vw - 60px) / 12); /* Adjusting for desktop */
@@ -307,8 +312,11 @@ button:hover {
     }
 }
 
-/* Larger Desktop Screens */
 @media (min-width: 1200px) {
+    .container {
+        margin: 1rem 0;
+    }
+    
     .main-grid {
         grid-template-columns: repeat(12, 1fr);
         grid-auto-rows: calc((100vw - 120px) / 12);
@@ -331,3 +339,28 @@ button:hover {
         grid-row: span 2;
     }
 }
+
+.context-menu {
+    position: absolute;
+    display: none;
+    background-color: #262626;
+    color: white;
+    border: 1px solid gray;
+    z-index: 100;
+  }
+  
+  .context-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .context-menu ul li {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .context-menu ul li:hover {
+    background-color: #555;
+  }
+  
