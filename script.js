@@ -39,7 +39,7 @@ tiles.forEach(tile => {
       customMenu.style.left = menuX;
       customMenu.style.top = menuY;
       customMenu.style.display = 'block';
-    }, 500);
+    }, 2000);
   });
 
   tile.addEventListener('touchend', () => {
